@@ -73,7 +73,7 @@ export const onAuthenticatedUser=async()=>{
             }
         })
         if(newUser){
-            return {status:201, user:newUser}
+            return {status:200, user:newUser}
         }else{
             return {status:400}
         }

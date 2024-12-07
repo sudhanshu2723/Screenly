@@ -15,5 +15,5 @@ const Loader=({state,className,children,color}:Props)=>{
                 <Spinner />
                 </div>
     else  
-        return <>{children}</>
+        return <div>{children}</div>
 }
