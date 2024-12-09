@@ -8,7 +8,7 @@ type Props={
     description:string 
     className?:string 
 }
-
+// used to invite other users to workspace 
 export default function Modal({children,description,title,trigger,className}:Props){
     return (
        <Dialog>

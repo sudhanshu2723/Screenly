@@ -110,3 +110,43 @@ export async function getNotifications() {
 
     }
 }
+// function used to search workspaces related to query 
+export async function searchUsers(query:string){
+    try{
+            const user=await currentUser();
+            if(!user)return {status:404}
+// The query retrieves a list of users (workspace) from the database using client.user.findMany.
+// It searches for users whose firstname, email, or lastname contains the query string (case-insensitive) 
+//while excluding the user with the provided clerkid. The results include selected fields: id, firstname, lastname
+//, image, email, and their subscription plan.
+            const users=await client.user.findMany({
+                where:{
+                    OR:[
+                        {firstname:{contains:query}},
+                        {email:{contains:query}},
+                        {lastname:{contains:query}}
+                    ],
+                    NOT:[{clerkid:user.id}]
+                },
+                select:{
+                    id:true,
+                    subscription:{
+                        select:{
+                            plan:true
+                        }
+                    },
+                    firstname:true,
+                    lastname:true,
+                    image:true,
+                    email:true
+                }
+            })
+            if(users && users.length>0){
+                return {status:200,data:users}
+            }
+            return {status:404,data:undefined}
+    }
+    catch(e){
+        return {status:500,data:undefined}
+    }
+}
