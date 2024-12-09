@@ -3,6 +3,7 @@ import {Manrope} from 'next/font/google'
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme";
+import ReactQueryProvider from "@/react-query";
 
 
 const manrope=Manrope({
@@ -30,7 +31,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+          <ReactQueryProvider>
         {children}
+        </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
