@@ -162,3 +162,7 @@ export const getWorkSpaces = async () => {
     }
   }
   
+
+  export async function CreateWorkspace(){
+    
+  }
