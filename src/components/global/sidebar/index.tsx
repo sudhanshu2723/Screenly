@@ -8,12 +8,18 @@ import { NotificationProps, WorkspaceProps } from "@/types/index.type"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import Modal from "../modal"
-import { PlusCircle } from "lucide-react"
+import { Menu, PlusCircle } from "lucide-react"
 import Search from "../search"
 import { MENU_ITEMS } from "@/constants"
 import { Item } from "@radix-ui/react-select"
 import SidebarItem from "./sidebar-item"
 import { getNotifications } from "@/actions/user"
+import WorkspacePlaceholder from "./workspace-placeholder"
+import GlobalCard from "../global-card"
+import { Button } from "@/components/ui/button"
+import { Loader } from "../loader"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import InfoBar from "../info-bar"
 
 
 
@@ -23,6 +29,7 @@ type Props={
 
 export default function Sidebar({activeWorkspaceId}:Props){
     const router=useRouter();
+    
     // function to change to workspace dashboard as we select a specific workspaceId
     function onChangeActiveWorkspace(value:string){
         router.push(`/dashboard/${value}`);
@@ -40,7 +47,7 @@ export default function Sidebar({activeWorkspaceId}:Props){
     // get all the dynamic routes
     const menuItems=MENU_ITEMS(activeWorkspaceId);
     const pathname=usePathname();
-    return (
+    const SidebarSection= (
         <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
             <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
             <Image
@@ -79,7 +86,7 @@ export default function Sidebar({activeWorkspaceId}:Props){
             </Select>
             {/* Inviting other memebers to the workspace  */}
             {/* {only a paid and user with public workspace can invite other members to its workspace} */}
-            {currentWorkspace?.type==='PUBLIC' && workspace.subscription?.plan==='PRO' && ( <Modal trigger={
+            {currentWorkspace?.type==='PUBLIC' && workspace.subscription?.plan==='FREE' && ( <Modal trigger={
               <span className="text-sm cursor-pointer flex items-center justify-center bg-neutral-800/90  hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
                 <PlusCircle
                   size={15}
@@ -111,7 +118,96 @@ export default function Sidebar({activeWorkspaceId}:Props){
         </nav>
         <Separator className="w-4/5" />
         <p className="w-full text-[#9D9D9D] font-bold mt-4 ">Workspaces</p>
-            
+            {/* telling user to purchase for PRO plan if he is in free plan */}
+            {/* if a user is in free plan then it will have only one personal workspace and will not be a member of other workspaces */}
+            {workspace.workspace.length === 1 && workspace.members.length === 0 && (
+            <div className="w-full mt-[-10px]">
+                <p className="text-[#3c3c3c] font-medium text-sm">
+                   {workspace.subscription?.plan === 'FREE'
+                     ? 'Upgrade to create workspaces'
+                     : 'No Workspaces'}
+                 </p>
+            </div>
+      )}
+        {/* all the workspaces that the person owns and are public workspaces */}
+            <nav className="w-full">
+                <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
+                    {workspace.workspace.length> 0 && workspace.workspace.map((item)=>(
+                        <SidebarItem 
+                        href={`/dashboaard/${item.id}`}
+                        selected={pathname === `/dashboard/${item.id}`}
+                        title={item.name}
+                        notifications={0}
+                        key={item.name}
+                        icon={<WorkspacePlaceholder>
+                            {item.name.charAt(0)}
+                        </WorkspacePlaceholder>}
+                        >
+
+                        </SidebarItem>
+                    ))}
+                    {/* Rendering all the workspace members */}
+                    {workspace.members.length>0 && workspace.members.map((item)=>(
+                        <SidebarItem
+                        href={`dashboard/${item.Workspace.id}`}
+                        selected={pathname===`/dashboard/${item.Workspace.id}`}
+                        title={item.Workspace.name}
+                        notifications={0}
+                        key={item.Workspace.name}
+                        icon={
+                            <WorkspacePlaceholder>
+                                {item.Workspace.name.charAt(0)}
+                            </WorkspacePlaceholder>
+                        }
+                        >
+                        </SidebarItem>
+                    )) }
+
+                </ul>
+            </nav>
+            {/* a button by which users can upgrade to pro plan */}
+            <Separator className="w-4/5"/>
+            {workspace.subscription?.plan==='FREE' && <GlobalCard
+            title="Upgrade to Pro"
+            description="Unlock AI features like transcription, AI summary, and more"
+            footer={
+                <Button className="text-sm w-full">
+                    <Loader color="#000" state={false}>Upgrade</Loader>
+                </Button>
+            }
+            >
+                  
+                </GlobalCard>}
         </div>
     )
+   
+        {/* Infobar */}
+        {/* sheet for mobile and desktop  */}
+        return (
+            <div className="full">
+                <InfoBar/>
+              <div className="md:hidden fixed my-4">
+                <Sheet>
+                  <SheetTrigger
+                    asChild
+                    className="ml-2"
+                  >
+                    <Button
+                      variant={'ghost'}
+                      className="mt-[2px]"
+                    >
+                      <Menu />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side={'left'}
+                    className="p-0 w-fit h-full"
+                  >
+                    {SidebarSection}
+                  </SheetContent>
+                </Sheet>
+              </div>
+              <div className="md:block hidden h-full">{SidebarSection}</div>
+            </div>
+          )
 }

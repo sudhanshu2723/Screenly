@@ -6,7 +6,6 @@ export function useQueryData(queryKey:QueryKey,queryFn:QueryFunction,enabled?:En
     const {data,isPending,refetch,isFetched,isFetching}=useQuery({
         queryKey,
         queryFn,
-        enabled
     })
 
     return {data,isPending,isFetched,refetch,isFetching}
