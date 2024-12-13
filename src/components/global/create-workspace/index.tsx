@@ -21,10 +21,10 @@ export default function CreateWorkspace(){
     // giving the type
     const {data:plan}=data as dataType;
     // if plan is free then you cannot create a workspace
-  //  if(plan.subscription?.plan==='FREE'){
-  ////      return <></>
-  //  }
-  //  if(plan.subscription?.plan==='PRO'){
+   if(plan.subscription?.plan==='FREE'){
+       return <></>
+   }
+   if(plan.subscription?.plan==='PRO'){
         return (
             <Modal 
             title="Create a Workspace"
@@ -37,6 +37,6 @@ export default function CreateWorkspace(){
             <WorkspaceForm/>
             </Modal>
         )
-   // }
+   }
    
 }

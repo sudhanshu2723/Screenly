@@ -17,9 +17,10 @@ import { getNotifications } from "@/actions/user"
 import WorkspacePlaceholder from "./workspace-placeholder"
 import GlobalCard from "../global-card"
 import { Button } from "@/components/ui/button"
-import { Loader } from "../loader"
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import InfoBar from "../info-bar"
+import Loader from "../loader"
 
 
 

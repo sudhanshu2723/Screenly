@@ -1,4 +1,7 @@
+import FormGenerator from "@/components/global/form-generator";
+import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "@/hooks/useCreateWorkspace"
+import Loader from '@/components/global/loader'
 
 type dataProps={
     name:string 
@@ -11,7 +14,18 @@ export default function WorkspaceForm(){
        onSubmit={onFormSubmit}
        className="flex flex-col gap-y-3"
        >
-fvfv
+       <FormGenerator 
+       name="Name"
+       register={register}
+       placeholder={'Workspace Name'}
+       label="Workspace Name"
+       errors={errors}
+       inputType="input"
+       type="text"
+        />
+        <Button className="text-sm w-full mt-2" type="submit" disabled={isPending}> 
+            <Loader state={isPending}>Create Worksapce</Loader>
+        </Button>
        </form>
     )
 }
