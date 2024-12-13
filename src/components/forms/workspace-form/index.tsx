@@ -1,15 +1,17 @@
-import { useMutationData } from "@/hooks/useMutationData"
-import { useMutation } from "@tanstack/react-query"
+import { useCreateWorkspace } from "@/hooks/useCreateWorkspace"
 
 type dataProps={
     name:string 
 }
-
+// creating a form of the PRO user to create workspaces
 export default function WorkspaceForm(){
-    const {}=useMutationData(['create-workspace'],(data:dataProps)=>CreateWorkspace(data.name),'user-workspace')
+    const {errors,isPending,onFormSubmit,register}=useCreateWorkspace();
     return (
-        <div>
-
-        </div>
+       <form
+       onSubmit={onFormSubmit}
+       className="flex flex-col gap-y-3"
+       >
+fvfv
+       </form>
     )
 }
