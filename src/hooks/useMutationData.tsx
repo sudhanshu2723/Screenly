@@ -1,4 +1,4 @@
-import { MutationFunction, MutationKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { MutationFunction, MutationKey, useMutation, useMutationState, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // wrppaer around useMutation hook
@@ -21,4 +21,21 @@ export function useMutationData(mutationKey:MutationKey,mutationFn:MutationFunct
     })
     return {mutate,isPending}
 
+}
+
+// The useMutationDataState function is a custom hook
+//  that helps track and retrieve the latest variables 
+// and status from a mutation in React
+export function useMutationDataState(mutationKey:MutationKey){
+    const data=useMutationState({
+        filters:{mutationKey},
+        select:(mutation)=>{
+            return {
+                variables:mutation.state.variables as any ,
+                status:mutation.state.status
+            }
+        }
+    });
+    const latestVariables=data[data.length-1];
+    return {latestVariables}
 }
