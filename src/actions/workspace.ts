@@ -228,3 +228,24 @@ export const getWorkSpaces = async () => {
          return {status:500,data:'Something went wrong'}
       }
   }
+
+  export async function CreateFolders(workSpaceId:string){
+      try{
+          const isNewFolders=await client.workSpace.update({
+            where:{
+              id:workSpaceId
+            },
+            data:{
+              folders:{
+                create:{name:"Untitled"}
+              }
+            }
+          })
+          if(isNewFolders){
+            return {status:200 ,message:"New Folder Created"}
+          }
+      }
+      catch(e){
+          return {status:500,message:"Something went wrong"}
+      }
+  }
