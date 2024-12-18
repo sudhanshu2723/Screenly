@@ -7,18 +7,33 @@ import { useMoveVideos } from "@/hooks/useFolders"
 type Props={
     videoId:string 
     currentFolder?:string 
-    currentWorkspace?:string 
+    currentWorkSpace?:string 
     currentFolderName?:string 
 }
 // changing the location of the video to a different folder
-export default function ChangeVideoLocation({videoId,currentFolder,currentFolderName,currentWorkspace}:Props){
-    // const {}=useMoveVideos();
+export default function ChangeVideoLocation({videoId,currentFolder,currentFolderName,currentWorkSpace}:Props){
+    
+    const { onFormSubmit,
+        errors,
+        register,
+        isPending,
+        folders,
+        workspaces,
+        isFetching,
+        isFolders,}=useMoveVideos(videoId,currentWorkSpace!);
+        // find the current folder details
+        const folder=folders.find((f)=>f.id===currentFolder);
+        // find the workspace details
+        const workspace=workspaces.find((f)=>f.id===currentWorkSpace);
+
     return (
+        
         <form className="flex flex-col gap-y-5">
             <div className="border-[1px] rounded-xl p-5">
                 <h2 className="text-xs mb-5 text-[#a4a4a4]">Current</h2>
-                <p className="text-[#a4a4a4]">Workspace</p>
+               {workspace &&  <p className="text-[#a4a4a4]">{workspace.name} Workspace</p>}
                 <p className="text-[#a4a4a4] text-sm">THis video has no folder</p>
+
 
             </div>
              <Separator orientation="horizontal"/>

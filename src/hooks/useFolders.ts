@@ -52,6 +52,15 @@ export  function useMoveVideos(videoId:string,currentWorkspace:string){
         })
         return ()=>workspace.unsubscribe()
       },[watch]);
-    
+      return {
+        onFormSubmit,
+        errors,
+        register,
+        isPending,
+        folders,
+        workspaces,
+        isFetching,
+        isFolders,
+      }
 
 }
