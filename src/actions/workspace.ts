@@ -158,8 +158,9 @@ export const getWorkSpaces = async () => {
       if (workspaces) {
         return { status: 200, data: workspaces }
       }
+      return {status:404,data:[]}
     } catch (error) {
-      return { status: 400 }
+      return { status: 400,data:[] }
     }
   }
   

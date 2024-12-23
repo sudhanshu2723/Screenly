@@ -21,7 +21,8 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import InfoBar from "../info-bar"
 import Loader from "../loader"
-
+import { useDispatch } from 'react-redux'
+import { WORKSPACES } from "@/redux/slices/workspaces"
 
 
 type Props={
@@ -30,7 +31,7 @@ type Props={
 
 export default function Sidebar({activeWorkspaceId}:Props){
     const router=useRouter();
-    
+    const dispatch = useDispatch()  
     // function to change to workspace dashboard as we select a specific workspaceId
     function onChangeActiveWorkspace(value:string){
         router.push(`/dashboard/${value}`);
@@ -48,6 +49,10 @@ export default function Sidebar({activeWorkspaceId}:Props){
     // get all the dynamic routes
     const menuItems=MENU_ITEMS(activeWorkspaceId);
     const pathname=usePathname();
+
+    if(isFetched && currentWorkspace){
+        dispatch(WORKSPACES({workspaces:workspace.workspace}))
+    }
     const SidebarSection= (
         <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
             <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
@@ -76,9 +81,9 @@ export default function Sidebar({activeWorkspaceId}:Props){
                                     ))}
                                     {/* showing the workspaces in which you are a member */}
                                     {workspace.members.length>0 && 
-                                    workspace.members.map((workspace)=>workspace.Workspace && (
-                                        <SelectItem value={workspace.Workspace.id} key={workspace.Workspace.id}>
-                                                {workspace.Workspace.name}
+                                    workspace.members.map((workspace)=>workspace.WorkSpace && (
+                                        <SelectItem value={workspace.WorkSpace.id} key={workspace.WorkSpace.id}>
+                                                {workspace.WorkSpace.name}
                                         </SelectItem>
                                     ))
                                     }
@@ -150,14 +155,14 @@ export default function Sidebar({activeWorkspaceId}:Props){
                     {/* Rendering all the workspace members */}
                     {workspace.members.length>0 && workspace.members.map((item)=>(
                         <SidebarItem
-                        href={`dashboard/${item.Workspace.id}`}
-                        selected={pathname===`/dashboard/${item.Workspace.id}`}
-                        title={item.Workspace.name}
+                        href={`dashboard/${item.WorkSpace.id}`}
+                        selected={pathname===`/dashboard/${item.WorkSpace.id}`}
+                        title={item.WorkSpace.name}
                         notifications={0}
-                        key={item.Workspace.name}
+                        key={item.WorkSpace.name}
                         icon={
                             <WorkspacePlaceholder>
-                                {item.Workspace.name.charAt(0)}
+                                {item.WorkSpace.name.charAt(0)}
                             </WorkspacePlaceholder>
                         }
                         >
