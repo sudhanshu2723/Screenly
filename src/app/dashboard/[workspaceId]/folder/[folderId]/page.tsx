@@ -27,6 +27,7 @@ export default async function Folder({params:{folderId,workspaceId}}:Props){
     return (
         <HydrationBoundary state={dehydrate(query)}>
             <FolderInfo folderId={folderId}/>
+            
             <Videos workspaceId={workspaceId} folderId={folderId} videosKey="folder-videos" />
         </HydrationBoundary>
     )

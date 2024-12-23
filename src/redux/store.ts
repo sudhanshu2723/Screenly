@@ -3,7 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 import FolderReducer from './slices/folders'
-import WorkSpaceReducer from './slices/workspace'
+import WorkSpaceReducer from './slices/workspaces'
 
 const rootReducer = combineReducers({
   FolderReducer,

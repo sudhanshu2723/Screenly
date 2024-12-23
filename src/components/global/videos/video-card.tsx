@@ -39,6 +39,11 @@ export default function VideoCard(props: Props){
       //   </div>
       //   </div>
       //  </Loader>
-      <ChangeVideoLocation/>
+      <ChangeVideoLocation
+        currentFolderName={props.Folder?.name}
+        videoId={props.id}
+        currentWorkSpace={props.workspaceId}
+        currentFolder={props.Folder?.id}
+      />
     )
 }

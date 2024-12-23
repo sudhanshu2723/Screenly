@@ -45,13 +45,23 @@ export  function useMoveVideos(videoId:string,currentWorkspace:string){
        useEffect(()=>{
         fetchFolders(currentWorkspace)
        },[]);
-
+// it runs whenever there is some changes that take place
        useEffect(()=>{
         const workspace=watch(async(value)=>{
           if(value.workspace_id)fetchFolders(value.workspace_id)
         })
         return ()=>workspace.unsubscribe()
       },[watch]);
-    
+   
+      return {
+        onFormSubmit,
+        errors,
+        register,
+        isPending,
+        folders,
+        workspaces,
+        isFetching,
+        isFolders
+      }
 
 }
