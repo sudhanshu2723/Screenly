@@ -40,8 +40,7 @@ const Folders = ({ workspaceId }: Props) => {
 
   const { status, data: folders } = data as FoldersProps
 
-  // if (isFetched && folders) {
-  // }
+  // store the details of the folders in the redux store
   if (isFetched && folders) {
     dispatch(FOLDERS({ folders: folders }))
   }

@@ -49,7 +49,7 @@ export default function Sidebar({activeWorkspaceId}:Props){
     // get all the dynamic routes
     const menuItems=MENU_ITEMS(activeWorkspaceId);
     const pathname=usePathname();
-
+// used for redux store to store the details of the workspace
     if(isFetched && currentWorkspace){
         dispatch(WORKSPACES({workspaces:workspace.workspace}))
     }

@@ -168,6 +168,7 @@ export const getWorkSpaces = async () => {
   export async function CreateWorkspace(name:string){
     try{
       const user=await currentUser();
+    
       if(!user)return {status:404}
       const authorized=await client.user.findUnique({
         where:{
@@ -183,6 +184,7 @@ export const getWorkSpaces = async () => {
       })
       // if the user is in a PRO plan allow him to create new workspaces
       if(authorized?.subscription?.plan==='PRO'){
+        console.log("hello ji")
           const workspace=await client.user.update({
             where:{
               clerkid:user.id 
@@ -197,7 +199,7 @@ export const getWorkSpaces = async () => {
             }
           })
           if(workspace){
-            return {status:201,data:'Workspace Created'}
+            return {status:200,data:'Workspace Created'}
           }
       }
       return {

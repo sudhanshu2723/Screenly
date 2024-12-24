@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "@/hooks/useCreateWorkspace"
 import Loader from '@/components/global/loader'
 
-type dataProps={
-    name:string 
-}
+
 // creating a form of the PRO user to create workspaces
 export default function WorkspaceForm(){
     const {errors,isPending,onFormSubmit,register}=useCreateWorkspace();
@@ -15,10 +13,10 @@ export default function WorkspaceForm(){
        className="flex flex-col gap-y-3"
        >
        <FormGenerator 
-       name="Name"
+       name="name"
        register={register}
        placeholder={'Workspace Name'}
-       label="Workspace Name"
+       label="Name"
        errors={errors}
        inputType="input"
        type="text"
