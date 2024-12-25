@@ -150,3 +150,27 @@ export async function searchUsers(query:string){
         return {status:500,data:undefined}
     }
 }
+
+// get the payment information of the user
+export async function getPaymentInfo(){
+    try {
+        const user = await currentUser()
+        if (!user) return { status: 404 }
+    
+        const payment = await client.user.findUnique({
+          where: {
+            clerkid: user.id,
+          },
+          select: {
+            subscription: {
+              select: { plan: true },
+            },
+          },
+        })
+        if (payment) {
+          return { status: 200, data: payment }
+        }
+      } catch (error) {
+        return { status: 400 }
+      }
+}

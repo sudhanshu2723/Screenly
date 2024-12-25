@@ -21,7 +21,7 @@ export default function GlobalHeader({workspace}:Props){
         </span>
         <h1 className="text-4xl font-bold">
             {pathname && !pathname.includes('folder')
-             ? <div>{pathname.charAt(0).toUpperCase()+pathname.slice(1).toLowerCase()}</div>: 
+             ? <div>{pathname.charAt(1).toUpperCase()+pathname.slice(2).toLowerCase()}</div>: 
                <div>My Library </div>}
         </h1>
       </article>

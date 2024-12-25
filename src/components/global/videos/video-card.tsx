@@ -48,7 +48,7 @@ export default function VideoCard(props: Props){
             <CopyLink variant={'ghost'} className="p-0 h-5 bg-hover:bg-transparent" videoId={props.id}/>
             {/* component having thumbnail , avatar image and other info */}
             </div>
-            <Link href={`/preview/${props.id}`} className="hover:bg-[#252525] transition duration-150 flex flex-col justify-between h-full" >
+            <Link href={`/dashboard/${props.workspaceId}/video/${props.id}`} className="hover:bg-[#252525] transition duration-150 flex flex-col justify-between h-full" >
             <video controls={false} preload="metadata" className="w-full aspect-video opacity-50 z-20">
                 <source src={`${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${props.source}#t=1`} />
 

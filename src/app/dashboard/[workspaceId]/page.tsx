@@ -2,6 +2,8 @@ import CreateFolders from "@/components/global/create-folders"
 import CreateWorkspace from "@/components/global/create-workspace"
 import Folders from "@/components/global/folders"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { dehydrate, HydrationBoundary, Query, QueryClient } from "@tanstack/react-query"
+import VideoPage from "./video/[videoId]/page"
 
 
 type Props={
@@ -9,7 +11,9 @@ type Props={
 }
 
 export default function workSpacePage({params}:Props){
+    const query = new QueryClient()
     return (
+        <HydrationBoundary state={dehydrate(query)}>
         <div>
             <Tabs defaultValue="videos" className="mt-6" >
                 <div className="flex w-full justify-between items-center">
@@ -37,5 +41,7 @@ export default function workSpacePage({params}:Props){
                 </section>
             </Tabs>
         </div>
+        
+        </HydrationBoundary>
     )
 }
