@@ -2,6 +2,34 @@
 
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server"
+import nodemailer from 'nodemailer'
+
+export const sendEmail = async (
+  to: string,
+  subject: string,
+  text: string,
+  html?: string
+) => {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.MAILER_EMAIL,
+      pass: process.env.MAILER_PASSWORD,
+    },
+  })
+
+  const mailOptions = {
+    to,
+    subject,
+    text,
+    html,
+  }
+  return { transporter, mailOptions }
+}
+
+
 //get the user from clerk
 // if the user already exists return its personal workspace details
 //if the user does not exists create the user and return its workspace and personal details
@@ -286,5 +314,117 @@ export const getFirstView = async () => {
      
     } catch (error) {
       return { status: 400 }
+    }
+  }
+  export const getVideoComments = async (Id: string) => {
+    try {
+      // Query the database for comments related to the given videoId or commentId
+      const comments = await client.comment.findMany({
+        where: {
+          OR: [{ videoId: Id }, { commentId: Id }], // Match either videoId or commentId
+          commentId: null, // Ensure only top-level comments are retrieved
+        },
+        include: {
+          reply: {
+            include: {
+              User: true, // Include user information for each reply
+            },
+          },
+          User: true, // Include user information for each comment
+        },
+      })
+  
+      
+      return { status: 200, data: comments }
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
+// Inviting other members to the workspace
+  export const inviteMembers = async (
+    workspaceId: string,
+    recieverId: string,
+    email: string
+  ) => {
+    try {
+      const user = await currentUser()
+      if (!user) return { status: 404 }
+      // Find the sender's information
+      const senderInfo = await client.user.findUnique({
+        where: {
+          clerkid: user.id,
+        },
+        select: {
+          id: true,
+          firstname: true,
+          lastname: true,
+        },
+      })
+      // Check if the sender exists
+      if (senderInfo?.id) {
+        // Check if the recipient exists
+        const workspace = await client.workSpace.findUnique({
+          where: {
+            id: workspaceId,
+          },
+          select: {
+            name: true,
+          },
+        })
+        // Check if the workspace exists
+        if (workspace) {
+          // Create an invitation for the recipient
+          const invitation = await client.invite.create({
+            data: {
+              senderId: senderInfo.id,
+              recieverId,
+              workSpaceId: workspaceId,
+              content: `You are invited to join ${workspace.name} Workspace, click accept to confirm`,
+            },
+            select: {
+              id: true,
+            },
+          })
+  // Update the recipient's notification
+          await client.user.update({
+            where: {
+              clerkid: user.id,
+            },
+            data: {
+              notification: {
+                create: {
+                  content: `${user.firstName} ${user.lastName} invited ${senderInfo.firstname} into ${workspace.name}`,
+                },
+              },
+            },
+          })
+        
+          if (invitation) {
+            // Send an email to the recipient
+            const { transporter, mailOptions } = await sendEmail(
+              email,
+              'You got an invitation',
+              'You are invited to join ${workspace.name} Workspace, click accept to confirm',
+              `<a href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}" style="background-color: #000; padding: 5px 10px; border-radius: 10px;">Accept Invite</a>`
+            )
+            // Send the email
+  
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log('🔴', error.message)
+              } else {
+                console.log('✅ Email send')
+              }
+            })
+            return { status: 200, data: 'Invite sent' }
+          }
+          return { status: 400, data: 'invitation failed' }
+        }
+        return { status: 404, data: 'workspace not found' }
+      }
+      return { status: 404, data: 'recipient not found' }
+    } catch (error) {
+      console.log(error)
+      return { status: 400, data: 'something went wrong' }
     }
   }

@@ -5,7 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMutationData } from "@/hooks/useMutationData";
 import { useSearch } from "@/hooks/useSearch"
 import {User } from "lucide-react";
-import { Loader } from "../loader";
+import  Loader  from "../loader";
+import { inviteMembers } from "@/actions/user";
 
 
 type Props={
@@ -18,7 +19,7 @@ export default function Search({workspaceId}:Props){
 // to fetch users via useQueryData, and manages the search results (onUsers) and loading state (isFetching).
         const {query,onSearchQuery,isFetching,onUsers}=useSearch('go-workspace','USERS');
 // hook used to invite members
-   // const {mutate,isPending}=useMutationData(['invite-member'],(data:{recieverId:string;email:string});
+    const {mutate,isPending}=useMutationData(['invite-member'],(data:{recieverId:string;email:string})=>inviteMembers(workspaceId,data.recieverId,data.email));
     
     return (
         <div className="flex flex-col gap-y-5">
@@ -57,13 +58,14 @@ export default function Search({workspaceId}:Props){
               <div className="flex-1 flex justify-end items-center">
                 <Button
                   onClick={() =>
-                  console.log("hello")
-                  }
+                  //  function to invite other members to the workspace adn send them email
+                  mutate({recieverId:user.id,email:user.email})
+                }
                   variant={'default'}
                   className="w-5/12 font-bold"
                 >
                   <Loader
-                    state={false}
+                    state={isPending}
                     color="#000"
                   >
                     Invite

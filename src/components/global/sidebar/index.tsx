@@ -92,7 +92,7 @@ export default function Sidebar({activeWorkspaceId}:Props){
             </Select>
             {/* Inviting other memebers to the workspace  */}
             {/* {only a paid and user with public workspace can invite other members to its workspace} */}
-            {currentWorkspace?.type==='PUBLIC' && workspace.subscription?.plan==='FREE' && ( <Modal trigger={
+            {currentWorkspace?.type==='PUBLIC' && workspace.subscription?.plan==='PRO' && ( <Modal trigger={
               <span className="text-sm cursor-pointer flex items-center justify-center bg-neutral-800/90  hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
                 <PlusCircle
                   size={15}
