@@ -12,6 +12,7 @@ import TabMenu from "../../tabs"
 import AiTools from "../../ai-tools"
 import VideoTranscript from "../../video-transcript"
 import { TabsContent } from "@/components/ui/tabs"
+import Activities from "../../activites"
 
 
 type Props={
@@ -108,9 +109,7 @@ export default function VideoPreview({videoId}:Props){
             <TabMenu defaultValue="Ai tools" triggers={['Ai tools','Transcript','Activity']}>
                 <AiTools plan="FREE" trial={false} videoId={videoId} />
                 <VideoTranscript transcript={video.description!}/>
-                <TabsContent value="Activity">
-                    Make changes to your account here. 
-                </TabsContent>
+                <Activities author={video.User?.firstname as string} videoId={videoId}/>
             </TabMenu>
           </div>
          </div>

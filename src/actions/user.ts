@@ -174,3 +174,117 @@ export async function getPaymentInfo(){
         return { status: 400 }
       }
 }
+
+// function to see if the firstView button of thee user is enabled or not
+export const getFirstView = async () => {
+    try {
+      const user = await currentUser()
+      if (!user) return { status: 404 }
+      const userData = await client.user.findUnique({
+        where: {
+          clerkid: user.id,
+        },
+        select: {
+          firstView: true,
+        },
+      })
+      if (userData) {
+        return { status: 200, data: userData.firstView }
+      }
+      return { status: 400, data: false }
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
+
+  // function to change the first view as the button changes
+  export const enableFirstView = async (state: boolean) => {
+    try {
+      const user = await currentUser()
+  
+      if (!user) return { status: 404 }
+  
+      const view = await client.user.update({
+        where: {
+          clerkid: user.id,
+        },
+        data: {
+          firstView: state,
+        },
+      })
+  
+      if (view) {
+        return { status: 200, data: 'Setting updated' }
+      }
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
+// function used to comment as well as do a reply
+  export const createCommentAndReply = async (
+    userId: string,
+    comment: string,
+    videoId: string,
+    commentId?: string | undefined
+  ) => {
+    try {
+        // if you are sending reply to a comment
+      if (commentId) {
+        const reply = await client.comment.update({
+          where: {
+            id: commentId,
+          },
+          data: {
+            reply: {
+              create: {
+                comment,
+                userId,
+                videoId,
+              },
+            },
+          },
+        })
+        if (reply) {
+          return { status: 200, data: 'Reply posted' }
+        }
+      }
+//   if you are making a new comment
+      const newComment = await client.video.update({
+        where: {
+          id: videoId,
+        },
+        data: {
+          Comment: {
+            create: {
+              comment,
+              userId,
+            },
+          },
+        },
+      })
+      if (newComment) return { status: 200, data: 'New comment added' }
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
+
+  export const getUserProfile = async () => {
+    try {
+      const user = await currentUser()
+      if (!user) return { status: 404 }
+      const profileIdAndImage = await client.user.findUnique({
+        where: {
+          clerkid: user.id,
+        },
+        select: {
+          image: true,
+          id: true,
+        },
+      })
+  
+      if (profileIdAndImage) return { status: 200, data: profileIdAndImage }
+     
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
