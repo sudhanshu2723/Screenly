@@ -1,5 +1,5 @@
 'use client'
-import { getPreviewVideo } from "@/actions/workspace"
+import { getPreviewVideo, sendEmailForFirstView } from "@/actions/workspace"
 import { useQueryData } from "@/hooks/useQueryData"
 import { VideoProps } from "@/types/index.type"
 import { useRouter } from "next/navigation"
@@ -13,6 +13,7 @@ import AiTools from "../../ai-tools"
 import VideoTranscript from "../../video-transcript"
 import { TabsContent } from "@/components/ui/tabs"
 import Activities from "../../activites"
+import { useEffect } from "react"
 
 
 type Props={
@@ -32,7 +33,14 @@ export default function VideoPreview({videoId}:Props){
      const daysAgo=Math.floor(
     (new Date().getTime()-video.createdAt.getTime())/(24*60*60*1000)
      )
-
+    // send the owner of the video that somenone have viewed the video
+    const notifyFirstView=async()=>{await sendEmailForFirstView(videoId)}
+    // useEffect which notifies the user if there is first view on the video
+    useEffect(()=>{
+        if(video.views===0)notifyFirstView()
+        return ()=>{
+      notifyFirstView()}
+    },[])
     return (
         <div className="grid grid-cols-1 xl:grid-cols-3 lg:py-10 overflow-y-auto gap-5">
       <div className="flex flex-col lg:col-span-2 gap-y-10">

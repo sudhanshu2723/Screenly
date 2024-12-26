@@ -23,6 +23,7 @@ import InfoBar from "../info-bar"
 import Loader from "../loader"
 import { useDispatch } from 'react-redux'
 import { WORKSPACES } from "@/redux/slices/workspaces"
+import PaymentButton from "../payment-button"
 
 
 type Props={
@@ -54,7 +55,7 @@ export default function Sidebar({activeWorkspaceId}:Props){
         dispatch(WORKSPACES({workspaces:workspace.workspace}))
     }
     const SidebarSection= (
-        <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
+        <div className="bg-[#111111]  flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
             <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
             <Image
             src="/opal-logo.svg"
@@ -135,6 +136,16 @@ export default function Sidebar({activeWorkspaceId}:Props){
                  </p>
             </div>
       )}
+       <Separator className="w-4/5"/>
+           
+           {workspace.subscription?.plan==='FREE' && 
+           (<GlobalCard
+           title="Upgrade to Pro"
+           description="Unlock AI features like transcription, AI summary, and more"
+           footer={
+             <PaymentButton />
+           }
+           />)}
         {/* all the workspaces that the person owns and are public workspaces */}
             <nav className="w-full">
                 <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
@@ -170,22 +181,22 @@ export default function Sidebar({activeWorkspaceId}:Props){
                     )) }
 
                 </ul>
+          
             </nav>
             {/* a button by which users can upgrade to pro plan */}
-            <Separator className="w-4/5"/>
-            {workspace.subscription?.plan==='FREE' && <GlobalCard
+            {/* <Separator className="w-4/5"/>
+           
+            {workspace.subscription?.plan==='FREE' && 
+            (<GlobalCard
             title="Upgrade to Pro"
             description="Unlock AI features like transcription, AI summary, and more"
             footer={
-                <Button className="text-sm w-full">
-                    <Loader color="#000" state={false}>Upgrade</Loader>
-                </Button>
+              <PaymentButton />
             }
-            >
-                  
-                </GlobalCard>}
+            />)} */}
+               
         </div>
-    )
+      )
    
         {/* Infobar */}
         {/* sheet for mobile and desktop  */}

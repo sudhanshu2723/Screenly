@@ -10,19 +10,21 @@ type Props={
 // building the header according to the Menu item
 export default function GlobalHeader({workspace}:Props){
     // finding the path in which we are present
-    const pathname=usePathname().split(`/dashboard/${workspace.id}`)[1]
+    const pathName=usePathname().split(`/dashboard/${workspace.id}`)[1]
 
 
     return (
         // displaying the type of page in which we are present
-      <article className="flex flex-col gap-2">
+        <article className="flex flex-col gap-2">
         <span className="text-[#707070] text-xs">
-            {workspace.type.toLocaleUpperCase()}
+          {pathName.includes('video') ? '' : workspace.type.toLocaleUpperCase()}
         </span>
         <h1 className="text-4xl font-bold">
-            {pathname && !pathname.includes('folder')
-             ? <div>{pathname.charAt(1).toUpperCase()+pathname.slice(2).toLowerCase()}</div>: 
-               <div>My Library </div>}
+          {pathName && !pathName.includes('folder') && !pathName.includes('video')
+            ? pathName.charAt(1).toUpperCase() + pathName.slice(2).toLowerCase()
+            : pathName.includes('video')
+            ? ''
+            : 'My Library'}
         </h1>
       </article>
       

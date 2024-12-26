@@ -3,6 +3,11 @@
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server"
 import nodemailer from 'nodemailer'
+import Stripe from 'stripe'
+// create a new stripe object
+const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET as string)
+
+
 
 export const sendEmail = async (
   to: string,
@@ -426,5 +431,104 @@ export const getFirstView = async () => {
     } catch (error) {
       console.log(error)
       return { status: 400, data: 'something went wrong' }
+    }
+  }
+
+  // function to accept the invite
+  export const acceptInvite = async (inviteId: string) => {
+    try {
+      // Get the current user
+      const user = await currentUser()
+      if (!user)
+        return {
+          status: 404,
+        }
+        // Find the invitation using the inviteId and the user's clerkid to ensure the user is the recipient of the invite 
+      const invitation = await client.invite.findUnique({
+        where: {
+          id: inviteId,
+        },
+        select: {
+          workSpaceId: true,
+          reciever: {
+            select: {
+              clerkid: true,
+            },
+          },
+        },
+      })
+  // Check if the user is the recipient of the invite
+      if (user.id !== invitation?.reciever?.clerkid) return { status: 401 }
+      // Update the invite to show that it has been accepted
+      const acceptInvite = client.invite.update({
+        where: {
+          id: inviteId,
+        },
+        data: {
+          accepted: true,
+        },
+      })
+      // Update the user's workspace to include the new member
+  
+      const updateMember = client.user.update({
+        where: {
+          clerkid: user.id,
+        },
+        data: {
+          members: {
+            create: {
+              workSpaceId: invitation.workSpaceId,
+            },
+          },
+        },
+      })
+  
+      // Perform a transaction to update the invite and the user's workspace
+      // used transaction to ensure that both the invite and the user's workspace are updated
+      // prevents the race condition
+      const membersTransaction = await client.$transaction([
+        acceptInvite,
+        updateMember,
+      ])
+  // Check if the transaction was successful
+      if (membersTransaction) {
+        return { status: 200 }
+      }
+      return { status: 400 }
+    } catch (error) {
+      return { status: 400 }
+    }
+  }
+
+
+  export const completeSubscription = async (session_id: string) => {
+    try {
+      const user = await currentUser()
+      if (!user) return { status: 404 }
+  
+      const session = await stripe.checkout.sessions.retrieve(session_id)
+      if (session) {
+        const customer = await client.user.update({
+          where: {
+            clerkid: user.id,
+          },
+          data: {
+            subscription: {
+              update: {
+                data: {
+                  customerId: session.customer as string,
+                  plan: 'PRO',
+                },
+              },
+            },
+          },
+        })
+        if (customer) {
+          return { status: 200 }
+        }
+      }
+      return { status: 404 }
+    } catch (error) {
+      return { status: 400 }
     }
   }

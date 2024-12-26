@@ -2,6 +2,7 @@
 
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server"
+import { sendEmail } from "./user";
 
 export default async function verifyAccessToWorkspace(workspaceId:string){
       try{
@@ -345,5 +346,77 @@ export const getPreviewVideo = async (videoId: string) => {
     return { status: 404 }
   } catch (error) {
     return { status: 400 }
+  }
+}
+// function used to send email to the user if someone have viewed the video
+export const sendEmailForFirstView = async (videoId: string) => {
+  try {
+    // get the current user
+    const user = await currentUser()
+    if (!user) return { status: 404 }
+    // get the first view settings of the user
+    const firstViewSettings = await client.user.findUnique({
+      where: { clerkid: user.id },
+      select: {
+        firstView: true,
+      },
+    })
+    // if the user have not enabled the first view settings then return
+    if (!firstViewSettings?.firstView) return
+// get the video details
+    const video = await client.video.findUnique({
+      where: {
+        id: videoId,
+      },
+      select: {
+        title: true,
+        views: true,
+        User: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    })
+    // if the video have 0 views then increase the view count and send the email to the user
+    if (video && video.views === 0) {
+      await client.video.update({
+        where: {
+          id: videoId,
+        },
+        data: {
+          views: video.views + 1,
+        },
+      })
+// send the email to the user
+      const { transporter, mailOptions } = await sendEmail(
+        video.User?.email!,
+        'You got a viewer',
+        `Your video ${video.title} just got its first viewer`
+      )
+// if the email is sent successfully then create a notification for the user
+      transporter.sendMail(mailOptions, async (error, info) => {
+        if (error) {
+          console.log(error.message)
+        } else {
+          // create a notification for the user if the email is sent successfully 
+          const notification = await client.user.update({
+            where: { clerkid: user.id },
+            data: {
+              notification: {
+                create: {
+                  content: mailOptions.text,
+                },
+              },
+            },
+          })
+          if (notification) {
+            return { status: 200 }
+          }
+        }
+      })
+    }
+  } catch (error) {
+    console.log(error)
   }
 }
