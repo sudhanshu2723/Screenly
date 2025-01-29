@@ -9,6 +9,7 @@ import { getWorkspaceFolders } from '@/actions/workspace'
 import { useMutationDataState } from '@/hooks/useMutationData'
 import { useDispatch } from 'react-redux'
 import { FOLDERS } from '@/redux/slices/folders'
+import Videos from '../videos'
 
 
 type Props = {
@@ -88,7 +89,11 @@ const Folders = ({ workspaceId }: Props) => {
           </>
         )}
       </div>
-     
+      <Videos
+        workspaceId={workspaceId}
+        folderId={workspaceId}
+        videosKey="user-videos"
+      />
     </div>
   )
 }

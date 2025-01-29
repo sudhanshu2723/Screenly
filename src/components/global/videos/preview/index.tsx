@@ -14,6 +14,7 @@ import VideoTranscript from "../../video-transcript"
 import { TabsContent } from "@/components/ui/tabs"
 import Activities from "../../activites"
 import { useEffect } from "react"
+import EditVideo from "../edit"
 
 
 type Props={
@@ -48,7 +49,7 @@ export default function VideoPreview({videoId}:Props){
             {/* Display the title of the video and if you are the author then you have edit access */}
           <div className="flex gap-x-5 items-start justify-between">
             <h2 className="text-white text-4xl font-bold">{video.title}</h2>
-            {/* {author ? (
+            {author ? (
               <EditVideo
                 videoId={videoId}
                 title={video.title as string}
@@ -56,7 +57,7 @@ export default function VideoPreview({videoId}:Props){
               />
             ) : (
               <></>
-            )} */}
+            )}
           </div>
           <span className="flex gap-x-3 mt-2">
             <p className="text-[#9D9D9D] capitalize">
@@ -81,7 +82,7 @@ export default function VideoPreview({videoId}:Props){
           <div className="flex gap-x-5 items-center justify-between">
             {/* If you are author then you can change the description of the video */}
             <p className="text-[#BDBDBD] text-semibold">Description</p>
-            {/* {author ? (
+            {author ? (
               <EditVideo
                 videoId={videoId}
                 title={video.title as string}
@@ -89,7 +90,7 @@ export default function VideoPreview({videoId}:Props){
               />
             ) : (
               <></>
-            )} */}
+            )}
           </div>
           <p className="text-[#9D9D9D] text-lg text-medium">
             {video.description}
@@ -116,7 +117,7 @@ export default function VideoPreview({videoId}:Props){
           <div>
             <TabMenu defaultValue="Ai tools" triggers={['Ai tools','Transcript','Activity']}>
                 <AiTools plan="FREE" trial={false} videoId={videoId} />
-                <VideoTranscript transcript={video.description!}/>
+                <VideoTranscript transcript={video.summery}/>
                 <Activities author={video.User?.firstname as string} videoId={videoId}/>
             </TabMenu>
           </div>

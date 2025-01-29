@@ -16,7 +16,9 @@ export default function Videos({folderId,videosKey,workspaceId}:Props){
     // getting video data    
     const {data:videoData}=useQueryData([videosKey],()=>getAllUserVideos(folderId));
     const {status:videosStatus,data:videos}=videoData as VideosProps;
-
+    console.log("the videos is")
+ console.log(videosStatus)
+  console.log(videos);
     return (
         <div className="flex flex-col gap-4 mt-4">
             <div className="flex items-center justify-between">
