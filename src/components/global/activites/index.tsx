@@ -29,9 +29,9 @@ export default function Activities({author,videoId}:Props){
           comment={comment.comment}
           key={comment.id}
           author={{
-            image: comment.User?.image!,
-            firstname: comment.User?.firstname!,
-            lastname: comment.User?.lastname!,
+            image: comment.User?.image || '',
+            firstname: comment.User?.firstname || 'sudhanshu',
+            lastname: comment.User?.lastname || 'pandey',
           }}
           videoId={videoId}
           reply={comment.reply}

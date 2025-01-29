@@ -1,5 +1,4 @@
 'use client'
-import ChangeVideoLocation from "@/components/forms/change-video-location"
 import Loader from "../loader"
 import CardMenu from "./video-card-menu"
 import CopyLink from "./copy-link"

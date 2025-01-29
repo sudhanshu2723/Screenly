@@ -1,10 +1,7 @@
 import { getPaymentInfo } from "@/actions/user"
 
-type Props={
-    
-}
 
-export default async function BillingPage(props:Props){
+export default async function BillingPage(){
     //get payment info of the costumer
     const payment=await getPaymentInfo();
 

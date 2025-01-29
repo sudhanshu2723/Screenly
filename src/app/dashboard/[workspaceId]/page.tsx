@@ -2,8 +2,8 @@ import CreateFolders from "@/components/global/create-folders"
 import CreateWorkspace from "@/components/global/create-workspace"
 import Folders from "@/components/global/folders"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { dehydrate, HydrationBoundary, Query, QueryClient } from "@tanstack/react-query"
-import VideoPage from "./video/[videoId]/page"
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
+
 
 
 type Props={

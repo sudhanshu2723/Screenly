@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { CommentRepliesProps } from '@/types/index.type'
-import { Dot, DotIcon } from 'lucide-react'
+import {  DotIcon } from 'lucide-react'
 import React, { useState } from 'react'
 
 type Props = {
@@ -93,9 +93,9 @@ const CommentCard = ({
               videoId={videoId}
               key={r.id}
               author={{
-                image: r.User?.image!,
-                firstname: r.User?.firstname!,
-                lastname: r.User?.lastname!,
+                image: r.User?.image || '',
+                firstname: r.User?.firstname || 'sudhanshu',
+                lastname: r.User?.lastname || 'pandey',
               }}
               createdAt={r.createdAt}
             />

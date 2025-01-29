@@ -3,7 +3,7 @@ import FormGenerator from '@/components/global/form-generator'
 import Loader from '@/components/global/loader'
 import { Button } from '@/components/ui/button'
 import { useVideoComment } from '@/hooks/useVideo'
-import { Send, X } from 'lucide-react'
+import { Send } from 'lucide-react'
 import React from 'react'
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
   close?: () => void
 }
 
-const CommentForm = ({ author, videoId, close, commentId }: Props) => {
+const CommentForm = ({ author, videoId, commentId }: Props) => {
     // hook used to comment on a video as well as reply to a comment
   const { errors, isPending, onFormSubmit, register } = useVideoComment(videoId,commentId)
 

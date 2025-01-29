@@ -11,7 +11,7 @@ import Modal from "../modal"
 import { Menu, PlusCircle } from "lucide-react"
 import Search from "../search"
 import { MENU_ITEMS } from "@/constants"
-import { Item } from "@radix-ui/react-select"
+
 import SidebarItem from "./sidebar-item"
 import { getNotifications } from "@/actions/user"
 import WorkspacePlaceholder from "./workspace-placeholder"
@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button"
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import InfoBar from "../info-bar"
-import Loader from "../loader"
+
 import { useDispatch } from 'react-redux'
 import { WORKSPACES } from "@/redux/slices/workspaces"
 import PaymentButton from "../payment-button"

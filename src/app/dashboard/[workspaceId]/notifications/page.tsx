@@ -2,13 +2,13 @@
 import { getNotifications } from '@/actions/user'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { useQueryData } from '@/hooks/useQueryData'
-import { QueryClient } from '@tanstack/react-query'
+
 import { User } from 'lucide-react'
 import React from 'react'
 
-type Props = {}
 
-const Notifications = (props: Props) => {
+
+const Notifications = () => {
   const { data: notifications } = useQueryData(
     ['user-notifications'],
     getNotifications

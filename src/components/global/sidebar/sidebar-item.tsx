@@ -10,7 +10,7 @@ type Props = {
   notifications?: number
 }
 
-const SidebarItem = ({ href, icon, selected, title, notifications }: Props) => {
+const SidebarItem = ({ href, icon, selected, title }: Props) => {
   return (
     <li className="cursor-pointer my-[5px]">
       <Link

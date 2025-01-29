@@ -5,7 +5,7 @@ type Props={
 }
 
 
-export default function ({children}:Props){
+export default function Layout({children}:Props){
     return (
         <div  className="container h-screen flex justify-center items-center">
           {children}

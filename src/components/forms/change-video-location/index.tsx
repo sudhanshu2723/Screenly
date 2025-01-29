@@ -1,4 +1,4 @@
-import { getFolderInfo, getWorkSpaces } from "@/actions/workspace"
+
 import Loader from "@/components/global/loader"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -15,9 +15,9 @@ type Props={
     currentFolderName?:string 
 }
 // changing the location of the video to a different folder
-export default  function ChangeVideoLocation({videoId,currentFolder,currentFolderName,currentWorkSpace}:Props){
+export default  function ChangeVideoLocation({videoId,currentFolder,currentWorkSpace}:Props){
     const {onFormSubmit,
-        errors,
+        
         register,
         isPending,
         folders,

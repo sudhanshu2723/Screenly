@@ -11,7 +11,7 @@ export function useVideoComment(videoId:string,commentId?:string){
 //    get the details of the user
     const {data}=useQueryData(['user-profile'],getUserProfile);
 //  give types to the data
-const {status,data:user}=data as {
+const {data:user}=data as {
     status:number 
     data:{id:string; image:string}
 }

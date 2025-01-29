@@ -13,7 +13,7 @@ type Props={
 }
 
 
-export default async function ({children,params:{workspaceId}}:Props){
+export default async function Page({children,params:{workspaceId}}:Props){
     const auth=await onAuthenticatedUser();
     // if the workspace of the user does not exist
     // this is done to prevent ts error

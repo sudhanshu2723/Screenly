@@ -112,6 +112,7 @@ export const onAuthenticatedUser=async()=>{
         }
     }
     catch(e){
+       console.log(e);
         return {status:500 , msg:"error in authentication "}
     }
 }
@@ -139,6 +140,7 @@ export async function getNotifications() {
         return {status:404,data:[]}
     }
     catch(e){
+      console.log(e)
         return {status:400,data:[]}
 
     }
@@ -180,6 +182,7 @@ export async function searchUsers(query:string){
             return {status:404,data:undefined}
     }
     catch(e){
+      console.log(e)
         return {status:500,data:undefined}
     }
 }
@@ -204,6 +207,7 @@ export async function getPaymentInfo(){
           return { status: 200, data: payment }
         }
       } catch (error) {
+        console.log(error);
         return { status: 400 }
       }
 }
@@ -226,6 +230,7 @@ export const getFirstView = async () => {
       }
       return { status: 400, data: false }
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }
@@ -250,6 +255,7 @@ export const getFirstView = async () => {
         return { status: 200, data: 'Setting updated' }
       }
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }
@@ -297,6 +303,7 @@ export const getFirstView = async () => {
       })
       if (newComment) return { status: 200, data: 'New comment added' }
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }
@@ -318,6 +325,7 @@ export const getFirstView = async () => {
       if (profileIdAndImage) return { status: 200, data: profileIdAndImage }
      
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }
@@ -342,6 +350,7 @@ export const getFirstView = async () => {
       
       return { status: 200, data: comments }
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }
@@ -414,8 +423,9 @@ export const getFirstView = async () => {
             )
             // Send the email
   
-            transporter.sendMail(mailOptions, (error, info) => {
+            transporter.sendMail(mailOptions, (error) => {
               if (error) {
+                console.log(error);
                 console.log('🔴', error.message)
               } else {
                 console.log('✅ Email send')
@@ -496,6 +506,7 @@ export const getFirstView = async () => {
       }
       return { status: 400 }
     } catch (error) {
+      console.log(error)
       return { status: 400 }
     }
   }
@@ -529,6 +540,7 @@ export const getFirstView = async () => {
       }
       return { status: 404 }
     } catch (error) {
+      console.log(error);
       return { status: 400 }
     }
   }

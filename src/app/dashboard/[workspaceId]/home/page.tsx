@@ -3,9 +3,9 @@
 // import VideoCard from '@/components/global/videos/video-card'
 import React from 'react'
 
-type Props = {}
 
-const Home = async (props: Props) => {
+
+const Home = async () => {
   // const videos = await getWixContent()
   // const post = await howToPost()
 

@@ -3,13 +3,13 @@ import { Spinner } from "./spinner"
 
 
 type Props={
-    state:Boolean
+    state:boolean
     className?:string
     color?:string
     children:React.ReactNode
 }
 
- const Loader=({state,className,children,color}:Props)=>{
+ const Loader=({state,className,children}:Props)=>{
     if(state) 
         return <div className={cn(className)}>
                 <Spinner />

@@ -2,15 +2,12 @@ import { Button } from '@/components/ui/button'
 import { TabsContent } from '@/components/ui/tabs'
 import React from 'react'
 import Loader from '../loader'
-import VideoRecorderDuotone from '@/components/icons/video-recorder-duotone'
-import { FileDuoToneBlack } from '@/components/icons'
+
 import {
   Bot,
-  DownloadIcon,
   FileTextIcon,
   Pencil,
   StarsIcon,
-  VideoIcon,
 } from 'lucide-react'
 
 type Props = {
@@ -26,7 +23,9 @@ const AiTools = ({ plan, trial, videoId }: Props) => {
   
   // useMutationData
   //serveraction titles and description
-
+console.log(trial)
+console.log(plan)
+console.log(videoId)
   //WIP: setup the ai hook
   return (
     <TabsContent value="Ai tools">

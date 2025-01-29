@@ -1,5 +1,5 @@
 import { client } from '@/lib/prisma'
-import { clerkClient } from '@clerk/nextjs/server'
+import {  createClerkClient } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
@@ -24,6 +24,7 @@ export async function GET(
     })
     if (userProfile)
       return NextResponse.json({ status: 200, user: userProfile })
+    const clerkClient=createClerkClient({secretKey:process.env.CLERK_SECRET_KEY})
     const clerkUserInstance = await clerkClient.users.getUser(id)
     const createUser = await client.user.create({
       data: {

@@ -3,9 +3,7 @@
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server"
 import { sendEmail } from "./user";
-import { createClient, OAuthStrategy } from '@wix/sdk'
-import { items } from '@wix/data'
-import axios from 'axios'
+
 
 export default async function verifyAccessToWorkspace(workspaceId:string){
       try{
@@ -16,13 +14,14 @@ export default async function verifyAccessToWorkspace(workspaceId:string){
       //   This query checks if a user (user.id) is associated with a specific workspace (workspaceId) in one of two ways:
         // Directly: The workspace has a User with the same clerkid as the user.
          //Indirectly: The user is part of the workspace's members
+         if(user && user.id){
          const isUserIntoWorkspace=await client.workSpace.findUnique({
             where:{
                 id:workspaceId,
                 OR:[
                     {
                         User:{
-                            clerkid:user.id
+                            clerkid:user.id 
                         }
                     },
                     {
@@ -37,12 +36,19 @@ export default async function verifyAccessToWorkspace(workspaceId:string){
                 ]
             }
          })
+        
          return {
             status:200,
             data:{workspace:isUserIntoWorkspace}
          }
+        }
+        return {
+          status:400,
+          data:{workspace:null}
+       }
       }
       catch(e){
+        console.log(e);
         return {
             status:403,
             data:{workspace:null}
@@ -72,6 +78,7 @@ export async function getWorkspaceFolders(workspaceId:string){
         return {status:404,data:[]}
     }
     catch(error){
+      console.log(error)
         return {status:500,data:[]}
     }
 }
@@ -118,6 +125,7 @@ export async function getAllUserVideos(workSpaceId:string){
 
     }
     catch(e){
+      console.log(e);
         return {status:400,msg:'some error occured in finding user videos'}
     }
 }
@@ -165,6 +173,7 @@ export const getWorkSpaces = async () => {
       }
       return {status:404,data:[]}
     } catch (error) {
+      console.log(error)
       return { status: 400,data:[] }
     }
   }
@@ -213,6 +222,7 @@ export const getWorkSpaces = async () => {
       }
     }
     catch(e){
+      console.log(e);
       return {
         status:400
       }
@@ -234,6 +244,7 @@ export const getWorkSpaces = async () => {
           return {status:400,data:'Folder does not exist'}
         }
       catch(e){
+        console.log(e);
          return {status:500,data:'Something went wrong'}
       }
   }
@@ -255,6 +266,7 @@ export const getWorkSpaces = async () => {
           }
       }
       catch(e){
+        console.log(e);
           return {status:500,message:"Something went wrong"}
       }
   }
@@ -280,6 +292,7 @@ export const getWorkSpaces = async () => {
         return {status:400,data:null}
     }
     catch(e){
+      console.log(e);
         return {status:500,data:null}
     }
   }
@@ -302,6 +315,7 @@ export const getWorkSpaces = async () => {
       if (location) return { status: 200, data: 'folder changed successfully' }
       return { status: 404, data: 'workspace/folder not found' }
     } catch (error) {
+      console.log(error)
       return { status: 500, data: 'Oops! something went wrong' }
     }
   }
@@ -349,6 +363,7 @@ export const getPreviewVideo = async (videoId: string) => {
 
     return { status: 404 }
   } catch (error) {
+    console.log(error)
     return { status: 400 }
   }
 }
@@ -394,12 +409,12 @@ export const sendEmailForFirstView = async (videoId: string) => {
       })
 // send the email to the user
       const { transporter, mailOptions } = await sendEmail(
-        video.User?.email!,
+        video.User?.email || 'sudhanshu2723@gmail.com',
         'You got a viewer',
         `Your video ${video.title} just got its first viewer`
       )
 // if the email is sent successfully then create a notification for the user
-      transporter.sendMail(mailOptions, async (error, info) => {
+      transporter.sendMail(mailOptions, async (error) => {
         if (error) {
           console.log(error.message)
         } else {
@@ -442,6 +457,7 @@ export const editVideoInfo = async (
     if (video) return { status: 200, data: 'Video successfully updated' }
     return { status: 404, data: 'Video not found' }
   } catch (error) {
+    console.log(error)
     return { status: 400 }
   }
 }

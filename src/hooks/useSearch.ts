@@ -41,13 +41,13 @@ export function useSearch(key:string,type:'USERS'){
                                                                                   const users=await searchUsers(queryKey[1] as string);
                                                                                   if(users.status===200)setOnUsers(users.data)
                                                                               }
-                                                                          }, false);
+                                                                          });
     // when the value of debounce changes then this function runs again and refetch the data using useQueryData function
     useEffect(()=>{
         if(debounce)refetch();
         if(!debounce)setOnUsers(undefined)
         return ()=>{
-            debounce
+           return
         }
     },[debounce])       
     return {onSearchQuery,query,isFetching,onUsers};                                                               
